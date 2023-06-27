@@ -11,7 +11,7 @@ import (
 //go:embed input.txt
 var filesystem embed.FS
 
-func getInputFile(fileName string) fs.File {
+func readInputFile(fileName string) fs.File {
 	// Read file, log error if something breaks
 	f, err := filesystem.Open(fileName)
 	if err != nil {
@@ -23,7 +23,7 @@ func getInputFile(fileName string) fs.File {
 
 func getInput(fileName string) []string {
 	var lines []string
-	scanner := bufio.NewScanner(getInputFile(fileName))
+	scanner := bufio.NewScanner(readInputFile(fileName))
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
