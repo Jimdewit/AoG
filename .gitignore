@@ -1,2 +1,2 @@
 /go.mod
-*/*.txt
+/AoG2018/Day*/Day*
