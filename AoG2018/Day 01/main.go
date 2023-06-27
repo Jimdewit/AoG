@@ -10,7 +10,6 @@ import (
 )
 
 //go:embed test_input.txt
-//go:embed 2test_input.txt
 //go:embed input.txt
 var filesystem embed.FS
 
