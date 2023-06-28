@@ -38,10 +38,9 @@ func parseClaim(claimContents []string) claim {
 	claimHeight := castToInt(strings.Split(splitClaim[len(splitClaim)-1], "x")[1])
 	leftUpperX := castToInt(strings.Split(splitClaim[2], ",")[0])
 	leftUpperY := castToInt(strings.Split(splitClaim[2], ",")[1][:len(strings.Split(splitClaim[2], ",")[1])-1])
-	leftUpperBoundary := []int{leftUpperX, leftUpperY}
 
 	parsedClaim := claim{elfNumber,
-		leftUpperBoundary,
+		[]int{leftUpperX, leftUpperY},
 		[]int{leftUpperX, leftUpperY + claimHeight},
 		[]int{leftUpperX + claimWidth, leftUpperY},
 		[]int{leftUpperX + claimWidth, leftUpperY + claimHeight}}
