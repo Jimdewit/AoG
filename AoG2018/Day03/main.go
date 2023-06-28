@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func castToInt(castTarget string) int {
@@ -14,17 +15,17 @@ func castToInt(castTarget string) int {
 	return convertedInt
 }
 
+type coords struct {
+	x int
+	y int
+}
+
 type claim struct {
 	elfNumber          int
 	leftUpperBoundary  coords
 	leftLowerBoundary  coords
 	rightUpperBoundary coords
 	rightLowerBoundary coords
-}
-
-type coords struct {
-	x int
-	y int
 }
 
 func fillMap(singleClaim claim, mappedClaims map[coords][]int) map[coords][]int {
@@ -75,7 +76,7 @@ func countDoubleClaims(mappedClaims map[coords][]int) int {
 	return counter
 }
 
-func checkForOverlaps(claimList [][]string, mappedClaims map[coords][]int) int {
+func checkForOverlaps(claimList [][]string, mappedClaims map[coords][]int, out chan<- int) {
 	for e := 0; e < len(claimList); e++ {
 		overlaps := 0
 		claimContents := claimList[e]
@@ -90,10 +91,9 @@ func checkForOverlaps(claimList [][]string, mappedClaims map[coords][]int) int {
 			}
 		}
 		if overlaps == 0 {
-			return parsedClaim.elfNumber
+			out <- parsedClaim.elfNumber
 		}
 	}
-	return 0
 }
 
 func main() {
@@ -101,7 +101,13 @@ func main() {
 	claimList := getInputFromInputFile(inputFilename)
 	mappedClaims := processClaimList(claimList)
 	doubleClaims := countDoubleClaims(mappedClaims)
+	start := time.Now().UnixMilli()
 	fmt.Printf("Double claims %d\n", doubleClaims)
-	uniqueClaim := checkForOverlaps(claimList, mappedClaims)
-	fmt.Printf("Unique claim %d", uniqueClaim)
+	chanRes := make(chan int, 1)
+	go checkForOverlaps(claimList, mappedClaims, chanRes)
+	uniqueClaim := <-chanRes
+	fmt.Printf("Unique claim %d\n", uniqueClaim)
+	finish := time.Now().UnixMilli()
+	timeTaken := finish - start
+	fmt.Printf("Time taken %d milliseconds", timeTaken)
 }
