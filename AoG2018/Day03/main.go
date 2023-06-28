@@ -76,8 +76,11 @@ func countDoubleClaims(mappedClaims map[coords][]int) int {
 	return counter
 }
 
-func checkForOverlaps(claimList [][]string, mappedClaims map[coords][]int, out chan<- int) {
-	for e := 0; e < len(claimList); e++ {
+func checkForOverlaps(claimList [][]string, mappedClaims map[coords][]int, startValue int, out chan<- int) {
+	for e := startValue; e < startValue+len(claimList)/6; e++ {
+		if e >= len(claimList) {
+			break
+		}
 		overlaps := 0
 		claimContents := claimList[e]
 		parsedClaim := parseClaim(claimContents)
@@ -105,7 +108,10 @@ func main() {
 
 	start := time.Now().UnixMilli()
 	chanRes := make(chan int, 1)
-	go checkForOverlaps(claimList, mappedClaims, chanRes)
+	for sv := 0; sv < len(claimList); sv += len(claimList) / 6 {
+		go checkForOverlaps(claimList, mappedClaims, sv, chanRes)
+	}
+
 	uniqueClaim := <-chanRes
 	fmt.Printf("Unique claim %d\n", uniqueClaim)
 	finish := time.Now().UnixMilli()
