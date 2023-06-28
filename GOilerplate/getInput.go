@@ -21,7 +21,7 @@ func readInputFile(fileName string) fs.File {
 	return f
 }
 
-func getInput(fileName string) []string {
+func getInputFromInputFile(fileName string) []string {
 	var lines []string
 	scanner := bufio.NewScanner(readInputFile(fileName))
 	for scanner.Scan() {

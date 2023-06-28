@@ -6,6 +6,6 @@ import (
 
 func main() {
 	inputFilename := "input.txt"
-	input := getInput(inputFilename)
+	input := getInputFromInputFile(inputFilename)
 	fmt.Print(input)
 }
