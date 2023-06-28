@@ -27,10 +27,11 @@ type coords struct {
 	y int
 }
 
-func fillMap(singleClaim claim, mappedClaims map[string][]int) map[string][]int {
+func fillMap(singleClaim claim, mappedClaims map[coords][]int) map[coords][]int {
 	for y := singleClaim.leftUpperBoundary.y; y < singleClaim.leftLowerBoundary.y; y++ {
 		for x := singleClaim.leftUpperBoundary.x; x < singleClaim.rightUpperBoundary.x; x++ {
-			mappedClaims[fmt.Sprintf("%d %d", x, y)] = append(mappedClaims[fmt.Sprintf("%d %d", x, y)], singleClaim.elfNumber)
+			claimCoordinates := coords{x, y}
+			mappedClaims[claimCoordinates] = append(mappedClaims[claimCoordinates], singleClaim.elfNumber)
 		}
 	}
 	return mappedClaims
@@ -53,8 +54,8 @@ func parseClaim(claimContents []string) claim {
 	return parsedClaim
 }
 
-func processClaimList(claimList [][]string) map[string][]int {
-	mappedClaims := make(map[string][]int)
+func processClaimList(claimList [][]string) map[coords][]int {
+	mappedClaims := make(map[coords][]int)
 	for e := 0; e < len(claimList); e++ {
 		claimContents := claimList[e]
 		parsedClaim := parseClaim(claimContents)
@@ -64,7 +65,7 @@ func processClaimList(claimList [][]string) map[string][]int {
 	return mappedClaims
 }
 
-func countDoubleClaims(mappedClaims map[string][]int) int {
+func countDoubleClaims(mappedClaims map[coords][]int) int {
 	counter := 0
 	for k := range mappedClaims {
 		if len(mappedClaims[k]) > 1 {
@@ -74,7 +75,7 @@ func countDoubleClaims(mappedClaims map[string][]int) int {
 	return counter
 }
 
-func checkForOverlaps(claimList [][]string, mappedClaims map[string][]int) int {
+func checkForOverlaps(claimList [][]string, mappedClaims map[coords][]int) int {
 	for e := 0; e < len(claimList); e++ {
 		overlaps := 0
 		claimContents := claimList[e]
