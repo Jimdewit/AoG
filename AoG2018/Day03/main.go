@@ -101,8 +101,9 @@ func main() {
 	claimList := getInputFromInputFile(inputFilename)
 	mappedClaims := processClaimList(claimList)
 	doubleClaims := countDoubleClaims(mappedClaims)
-	start := time.Now().UnixMilli()
 	fmt.Printf("Double claims %d\n", doubleClaims)
+
+	start := time.Now().UnixMilli()
 	chanRes := make(chan int, 1)
 	go checkForOverlaps(claimList, mappedClaims, chanRes)
 	uniqueClaim := <-chanRes
