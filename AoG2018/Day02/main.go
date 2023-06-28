@@ -42,7 +42,7 @@ func compareWordToOthers(wordToCheck string, allWords []string) string {
 
 func main() {
 	inputFilename := "input.txt"
-	input := getInput(inputFilename)
+	input := getInputFromInputFile(inputFilename)
 	countTwos, countThrees := 0, 0
 	// part one-1: count number of words that have a letter occurring twice
 	for x := 0; x < len(input); x++ {
