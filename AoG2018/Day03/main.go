@@ -16,15 +16,20 @@ func castToInt(castTarget string) int {
 
 type claim struct {
 	elfNumber          int
-	leftUpperBoundary  []int
-	leftLowerBoundary  []int
-	rightUpperBoundary []int
-	rightLowerBoundary []int
+	leftUpperBoundary  coords
+	leftLowerBoundary  coords
+	rightUpperBoundary coords
+	rightLowerBoundary coords
+}
+
+type coords struct {
+	x int
+	y int
 }
 
 func fillMap(singleClaim claim, mappedClaims map[string][]int) map[string][]int {
-	for y := singleClaim.leftUpperBoundary[1]; y < singleClaim.leftLowerBoundary[1]; y++ {
-		for x := singleClaim.leftUpperBoundary[0]; x < singleClaim.rightUpperBoundary[0]; x++ {
+	for y := singleClaim.leftUpperBoundary.y; y < singleClaim.leftLowerBoundary.y; y++ {
+		for x := singleClaim.leftUpperBoundary.x; x < singleClaim.rightUpperBoundary.x; x++ {
 			mappedClaims[fmt.Sprintf("%d %d", x, y)] = append(mappedClaims[fmt.Sprintf("%d %d", x, y)], singleClaim.elfNumber)
 		}
 	}
@@ -40,10 +45,10 @@ func parseClaim(claimContents []string) claim {
 	leftUpperY := castToInt(strings.Split(splitClaim[2], ",")[1][:len(strings.Split(splitClaim[2], ",")[1])-1])
 
 	parsedClaim := claim{elfNumber,
-		[]int{leftUpperX, leftUpperY},
-		[]int{leftUpperX, leftUpperY + claimHeight},
-		[]int{leftUpperX + claimWidth, leftUpperY},
-		[]int{leftUpperX + claimWidth, leftUpperY + claimHeight}}
+		coords{leftUpperX, leftUpperY},
+		coords{leftUpperX, leftUpperY + claimHeight},
+		coords{leftUpperX + claimWidth, leftUpperY},
+		coords{leftUpperX + claimWidth, leftUpperY + claimHeight}}
 
 	return parsedClaim
 }
