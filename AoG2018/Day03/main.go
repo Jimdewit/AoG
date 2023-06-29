@@ -99,7 +99,7 @@ func checkForOverlaps(claimList *[][]string, mappedClaims *map[coords][]int, sta
 	}
 }
 
-func main() {
+func doSolve() int {
 	inputFilename := "input.txt"
 	claimList := getInputFromInputFile(inputFilename)
 	mappedClaims := processClaimList(claimList)
@@ -117,4 +117,9 @@ func main() {
 	finish := time.Now().UnixMilli()
 	timeTaken := finish - start
 	fmt.Printf("Time taken %d milliseconds", timeTaken)
+	return uniqueClaim
+}
+
+func main() {
+	doSolve()
 }
